@@ -1,0 +1,32 @@
+{
+  "name": "speco",
+  "version": "0.1.5",
+  "description": "",
+  "source": "src/speco.js",
+  "module": "dist/speco.es.js",
+  "main": "dist/speco.js",
+  "umd:main": "dist/speco.umd.js",
+  "keywords": [],
+  "dependencies": {
+    "lodash.isnumber": "^3.0.3",
+    "lodash.isstring": "^4.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1",
+    "microbundle": "^0.11.0"
+  },
+  "scripts": {
+    "build": "microbundle",
+    "release": "npm run build && npm t && git push && npm publish",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "jest": {
+    "watchPathIgnorePatterns": [
+      "node_modules"
+    ]
+  }
+}

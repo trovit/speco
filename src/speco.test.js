@@ -81,7 +81,7 @@ describe("specs explanations", () => {
     expect(s2.explain(composedSpec, 5)).toEqual("Ok");
   });
 
-  test("composing specs with not", () => {
+  xtest("composing specs with not", () => {
     const negatedSpec = s.not(s.NUM);
 
     expect(s.explain(negatedSpec, "2")).toEqual("Ok");

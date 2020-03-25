@@ -1,4 +1,4 @@
-import s from "./speco3";
+import s from "./speco";
 
 describe("explaining values according to specs", () => {
   test("explaining string specs", () => {
@@ -126,5 +126,11 @@ describe("explaining values according to specs", () => {
     expect(s.explain(negatedOrSpec, 3)).toEqual("Ok");
     expect(s.explain(negatedOrSpec, 2)).toEqual("error: 2 fails not [or [spec.STRINGspec.pred(isEven)]]");
     expect(s.explain(negatedOrSpec, "2")).toEqual("error: \"2\" fails not [or [spec.STRINGspec.pred(isEven)]]");
+  });
+
+  test("specifying any value", () => {
+    expect(s.explain(s.ANY, 3)).toEqual("Ok");
+    expect(s.explain(s.ANY, "hola")).toEqual("Ok");
+    expect(s.explain(s.ANY, {})).toEqual("Ok");
   });
 });

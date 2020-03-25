@@ -1,4 +1,4 @@
-import s from "./speco3";
+import s from "./speco";
 
 describe("validating values satisfy specs", ()=> {
   test("validating strings", () => {
@@ -112,5 +112,11 @@ describe("validating values satisfy specs", ()=> {
     expect(s.isValid(negatedOrSpec, 3)).toEqual(true);
     expect(s.isValid(negatedOrSpec, 2)).toEqual(false);
     expect(s.isValid(negatedOrSpec, "2")).toEqual(false);
+  });
+
+  test("specifying any value", () => {
+    expect(s.isValid(s.ANY, 3)).toEqual(true);
+    expect(s.isValid(s.ANY, "hola")).toEqual(true);
+    expect(s.isValid(s.ANY, {})).toEqual(true);
   });
 });

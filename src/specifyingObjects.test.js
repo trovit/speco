@@ -171,4 +171,25 @@ describe("validating objects according to specs", () => {
     expect(s.isValid(objSpec, {x: {a: 2}})).toEqual(false);
     expect(s.isValid(objSpec, {x: {a: "2"}})).toEqual(true);
   });
+
+  test("negating object specs", () => {
+    const innerObjSpec = s.OBJ({req: {a: s.STRING}});
+    const objSpec = s.OBJ({req: {x: innerObjSpec}});
+    const negatedSpec = s.not(objSpec);
+
+    expect(s.isValid(negatedSpec, 1)).toEqual(true);
+    expect(s.isValid(negatedSpec, "aa")).toEqual(true);
+    expect(s.isValid(negatedSpec, [])).toEqual(true);
+    expect(s.isValid(negatedSpec, {a: 1})).toEqual(true);
+    expect(s.isValid(negatedSpec, {x: 1})).toEqual(true);
+    expect(s.isValid(negatedSpec, {x: {b: 3}})).toEqual(true);    
+    expect(s.isValid(negatedSpec, {x: {a: 2}})).toEqual(true);
+    expect(s.isValid(negatedSpec, {x: {a: "2"}})).toEqual(false);
+
+    const anotherObjSpec = s.OBJ({opt: {x: innerObjSpec}});
+    const anotherNegatedSpec = s.not(anotherObjSpec);
+    expect(s.isValid(negatedSpec, {x: {a: 2}})).toEqual(true);
+    expect(s.isValid(negatedSpec, {})).toEqual(true);
+    expect(s.isValid(anotherNegatedSpec, {x: {a: "2"}})).toEqual(false);    
+  });
 });

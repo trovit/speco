@@ -170,11 +170,33 @@ function ANY() {
 function OBJ({req, opt}) {
   return function(value) {
     function check() {
+      return errors().length === 0;
+    }
 
+    function describeSpecs(ks) {
+      if(!ks) {
+        return "";
+      }
+      return Object.entries(ks).map(
+        ([k, spec]) => {
+          return k + ": " +  spec(value).describe();
+        },
+      ).join(", ");
     }
 
     function describe() {
-
+      let description = "OBJ({";
+      if(req) {
+        description +=  "req: {" + describeSpecs(req) + "}";
+        if(opt) {
+          description += ", "
+        }
+      }
+      if(opt) {
+        description += "opt: {" + describeSpecs(opt) + "}"
+      }
+      description += "})";
+      return description;
     }
 
     function noObjectErrors() {

@@ -1,7 +1,6 @@
 import s from "./speco";
 
-describe("explaining objects according to specs", () => {
-  
+describe("explaining objects according to specs", () => {  
   test("only plain objects", () => {
     const objSpec = s.OBJ({req: {}});
     function Foo() {
@@ -76,5 +75,100 @@ describe("explaining objects according to specs", () => {
     expect(s.explain(objSpec, {x: {b: 3}})).toEqual("error: key x with value {\"b\":3} failures -> {\"b\":3} missing keywords (a)");    
     expect(s.explain(objSpec, {x: {a: 2}})).toEqual("error: key x with value {\"a\":2} failures -> key a with value 2 failures -> and [2 fails spec.STRING]");
     expect(s.explain(objSpec, {x: {a: "2"}})).toEqual("Ok");
+  });
+
+  test("negating object specs", () => {
+    const innerObjSpec = s.OBJ({req: {a: s.STRING}});
+    const objSpec = s.OBJ({req: {x: innerObjSpec}});
+    const negatedSpec = s.not(objSpec);
+
+    expect(s.explain(negatedSpec, 1)).toEqual("Ok");
+    expect(s.explain(negatedSpec, "aa")).toEqual("Ok");
+    expect(s.explain(negatedSpec, [])).toEqual("Ok");
+    expect(s.explain(negatedSpec, {a: 1})).toEqual("Ok");
+    expect(s.explain(negatedSpec, {x: 1})).toEqual("Ok");
+    expect(s.explain(negatedSpec, {x: {b: 3}})).toEqual("Ok");    
+    expect(s.explain(negatedSpec, {x: {a: 2}})).toEqual("Ok");
+    expect(s.explain(negatedSpec, {x: {a: "2"}})).toEqual("error: {\"x\":{\"a\":\"2\"}} fails not [OBJ({req: {x: OBJ({req: {a: spec.STRING}})}})]");
+
+    const anotherObjSpec = s.OBJ({opt: {x: innerObjSpec}});
+    const anotherNegatedSpec = s.not(anotherObjSpec);
+    expect(s.explain(negatedSpec, {x: {a: 2}})).toEqual("Ok");
+    expect(s.explain(negatedSpec, {})).toEqual("Ok");
+    expect(s.explain(anotherNegatedSpec, {x: {a: "2"}})).toEqual("error: {\"x\":{\"a\":\"2\"}} fails not [OBJ({opt: {x: OBJ({req: {a: spec.STRING}})}})]");    
+  });
+});
+
+describe("validating objects according to specs", () => {  
+  test("only plain objects", () => {
+    const objSpec = s.OBJ({req: {}});
+    function Foo() {
+      this.a = 1;
+    }
+
+    expect(s.isValid(objSpec, {a: 1, b: 2})).toEqual(true);
+    expect(s.isValid(objSpec, [])).toEqual(false);
+    expect(s.isValid(objSpec, 1)).toEqual(false);
+    expect(s.isValid(objSpec, "a")).toEqual(false);
+    expect(s.isValid(objSpec, new Foo())).toEqual(false);
+  });
+
+  test("required keys", () => {
+    const objSpec = s.OBJ({req: {a: s.ANY, b: s.ANY}});
+
+    expect(s.isValid(objSpec, {a: 1, b: 2})).toEqual(true);
+    expect(s.isValid(objSpec, {a: 1})).toEqual(false);
+    expect(s.isValid(objSpec, {})).toEqual(false);
+  });
+
+  test("specifying values for required keys", () => {
+    const objSpec = s.OBJ({req: {a: s.NUM, b: s.STRING}});
+
+    expect(s.isValid(objSpec, {a: 1, b: "lala"})).toEqual(true);
+    expect(s.isValid(objSpec, {a: 1, b: 2})).toEqual(false);
+    expect(s.isValid(objSpec, {a: true, b: "koko"})).toEqual(false);
+  });  
+
+  test("specifying values for optional keys", () => {
+    const objSpec = s.OBJ({opt: {a: s.NUM, b: s.STRING}});
+
+    expect(s.isValid(objSpec, {a: 1, b: "lala"})).toEqual(true);
+    expect(s.isValid(objSpec, {a: 1})).toEqual(true);
+    expect(s.isValid(objSpec, {b: "lala"})).toEqual(true);
+    expect(s.isValid(objSpec, {a: 1, b: 2})).toEqual(false);
+    expect(s.isValid(objSpec, {a: true, b: "koko"})).toEqual(false);
+  });
+
+  test("specifying values of keys composing specs", () => {
+    const isEven = (n) => n%2 === 0;
+    const multipleOfTen = (n) => n%10 === 0;
+    const containsTwo = (n) => `${n}`.indexOf("2") >= 0;
+    const composedSpec = s.and(
+      s.pred(multipleOfTen),
+      s.pred(isEven), 
+      s.and(s.NUM, s.pred(containsTwo))
+    );
+    const objSpec = s.OBJ({req: {a: composedSpec}});
+
+    expect(s.isValid(objSpec, {a: 1})).toEqual(false);
+
+    const anotherSpec = s.and(s.pred(isEven), s.STRING);
+    expect(s.isValid(
+      s.OBJ({req: {a: composedSpec, b: anotherSpec}}), {a: 1, b: "3"})).toEqual(false);
+  });
+
+  test("specifying nested objects", () => {
+    const isEven = (n) => n%2 === 0;
+    const multipleOfTen = (n) => n%10 === 0;
+    const containsTwo = (n) => `${n}`.indexOf("2") >= 0;
+    const composedSpec = s.and(s.pred(isEven), s.STRING);
+    const innerObjSpec = s.OBJ({req: {a: composedSpec}});
+    const objSpec = s.OBJ({req: {x: innerObjSpec}});
+
+    expect(s.isValid(objSpec, {a: 1})).toEqual(false);
+    expect(s.isValid(objSpec, {x: 1})).toEqual(false);
+    expect(s.isValid(objSpec, {x: {b: 3}})).toEqual(false);    
+    expect(s.isValid(objSpec, {x: {a: 2}})).toEqual(false);
+    expect(s.isValid(objSpec, {x: {a: "2"}})).toEqual(true);
   });
 });

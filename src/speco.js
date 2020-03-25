@@ -248,9 +248,7 @@ function OBJ({req, opt}) {
     }
 
     function errors() {
-      const errors = [];
-
-      return errors.concat(
+      return [].concat(
         noObjectErrors()
       ).concat(
         missingKeysErrors()

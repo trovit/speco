@@ -119,4 +119,17 @@ describe("validating values satisfy specs", ()=> {
     expect(s.isValid(s.ANY, "hola")).toEqual(true);
     expect(s.isValid(s.ANY, {})).toEqual(true);
   });
+
+  test("specifying a null value", () => {
+    expect(s.isValid(s.NULL, 3)).toEqual(false);
+    expect(s.isValid(s.NULL, null)).toEqual(true);
+    expect(s.isValid(s.NULL, {})).toEqual(false);
+  });
+
+  test("specifying nullable value", () => {
+    const nullableNumSpec = s.mayBe(s.NUM);
+    expect(s.isValid(nullableNumSpec, 3)).toEqual(true);
+    expect(s.isValid(nullableNumSpec, null)).toEqual(true);
+    expect(s.isValid(nullableNumSpec, {})).toEqual(false);
+  });
 });

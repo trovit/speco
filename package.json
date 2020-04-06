@@ -8,6 +8,7 @@
   "umd:main": "dist/speco.umd.js",
   "keywords": [],
   "dependencies": {
+    "lodash.isnull": "^3.0.0",
     "lodash.isnumber": "^3.0.3",
     "lodash.isobject": "^3.0.2",
     "lodash.isplainobject": "^4.0.6",

@@ -133,4 +133,18 @@ describe("explaining values according to specs", () => {
     expect(s.explain(s.ANY, "hola")).toEqual("Ok");
     expect(s.explain(s.ANY, {})).toEqual("Ok");
   });
+
+  test("specifying a null value", () => {
+    expect(s.explain(s.NULL, 3)).toEqual("error: 3 fails spec.NULL");
+    expect(s.explain(s.NULL, null)).toEqual("Ok");
+    expect(s.explain(s.NULL, {})).toEqual("error: {} fails spec.NULL");
+  });
+
+  test("specifying nullable value", () => {
+    const nullableNumSpec = s.mayBe(s.NUM);
+    expect(s.explain(nullableNumSpec, 3)).toEqual("Ok");
+    expect(s.explain(nullableNumSpec, null)).toEqual("Ok");
+    expect(s.explain(nullableNumSpec, {})).toEqual("error: or [{} fails spec.NUM, {} fails spec.NULL]");
+  });
+
 });

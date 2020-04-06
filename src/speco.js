@@ -3,6 +3,7 @@ import isNumber from "lodash.isnumber";
 import isPlainObject from "lodash.isplainobject";
 import isObject from "lodash.isobject";
 import zip from "lodash.zip";
+import isNull from "lodash.isnull"
 
 function format(value) {
   if (Array.isArray(value)) {
@@ -334,6 +335,24 @@ function ARRAY(...specs) {
   };
 }
 
+function NULL(value){
+  function describe() {
+    return "spec.NULL";
+  }
+
+  const check = () => isNull(value);
+  
+  return {
+    check,
+    describe,
+    errors: () => simpleErrors({check, describe}, format(value))
+  };
+}
+
+function mayBe(spec) {
+  return or(spec, NULL);
+}
+
 function explain(spec, value) { 
   const errors = spec(value).errors();
   if (errors.length === 0) {
@@ -352,10 +371,12 @@ export default {
   ANY,
   OBJ,
   ARRAY,
+  NULL,
   pred,
   not,
   and,
   or,
+  mayBe,
   explain,
   isValid
 }

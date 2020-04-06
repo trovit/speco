@@ -267,6 +267,22 @@ function OBJ({req, opt}) {
   }
 }
 
+function ARRAY() {
+  return function(value) {
+    function describe() {
+      return "spec.ARRAY";
+    }
+
+    const check = () => Array.isArray(value);
+
+    return {
+      check,
+      describe,
+      errors: () => simpleErrors({check, describe}, format(value))
+    };
+  };
+}
+
 function explain(spec, value) { 
   const errors = spec(value).errors();
   if (errors.length === 0) {
@@ -280,14 +296,15 @@ function isValid(spec, value) {
 }
 
 export default {
-  explain,
   STRING,
   NUM,
   ANY,
   OBJ,
+  ARRAY,
   pred,
   not,
   and,
   or,
+  explain,
   isValid
 }

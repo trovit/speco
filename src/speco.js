@@ -2,6 +2,7 @@ import isString from "lodash.isstring";
 import isNumber from "lodash.isnumber";
 import isPlainObject from "lodash.isplainobject";
 import isObject from "lodash.isobject";
+import zip from "lodash.zip";
 
 function format(value) {
   if (Array.isArray(value)) {
@@ -167,7 +168,10 @@ function ANY() {
   };
 }
 
-function OBJ({req, opt}) {
+function OBJ(keysSpec = {}) {
+
+  const {req, opt} = keysSpec;
+
   return function(value) {
     function check() {
       return errors().length === 0;
@@ -267,18 +271,65 @@ function OBJ({req, opt}) {
   }
 }
 
-function ARRAY() {
+function ARRAY(...specs) {
   return function(value) {
-    function describe() {
-      return "spec.ARRAY";
+    function describeSpecs() {
+      if(!specs) {
+        return "";
+      }
+      const specsDescription = specs.map(
+        (spec) => {
+          return spec(value).describe();
+        },
+      ).join(", ");
+
+      return "[" + specsDescription + "]";
     }
 
-    const check = () => Array.isArray(value);
+    function describe() {
+      return "spec.ARRAY("+ describeSpecs() + ")";
+    }
+
+    function check() {
+      return errors().length === 0;
+    }
+
+    function errors() {
+      function lengthErrors(elements) {
+        if(specs.length !== elements.length) {
+          return [format(elements) + " should have " + specifiedLength + " elements" ];
+        }
+        return []
+      }
+
+      function elementsErrors(elements) {
+        return zip(specs, elements).reduce(
+          (acc, [spec, element]) => { 
+            if(element) {
+              return acc.concat(spec(element).errors());  
+            } 
+            return acc;
+          },
+          []
+        );
+      }
+
+      if(!Array.isArray(value)) {
+        return [format(value) + " is not an array"];   
+      }
+
+      const specifiedLength = specs.length;
+      if(specifiedLength > 0) {
+        return lengthErrors(value).concat(elementsErrors(value))
+      } 
+
+      return [];
+    }
 
     return {
       check,
       describe,
-      errors: () => simpleErrors({check, describe}, format(value))
+      errors
     };
   };
 }

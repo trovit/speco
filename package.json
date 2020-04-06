@@ -11,7 +11,8 @@
     "lodash.isnumber": "^3.0.3",
     "lodash.isobject": "^3.0.2",
     "lodash.isplainobject": "^4.0.6",
-    "lodash.isstring": "^4.0.1"
+    "lodash.isstring": "^4.0.1",
+    "lodash.zip": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

@@ -1,12 +1,15 @@
 {
   "name": "speco",
-  "version": "0.1.5",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Humble specs for JS data",
   "source": "src/speco.js",
   "module": "dist/speco.es.js",
   "main": "dist/speco.js",
   "umd:main": "dist/speco.umd.js",
-  "keywords": [],
+  "keywords": [
+    "specs",
+    "javascript"
+  ],
   "dependencies": {
     "lodash.isnull": "^3.0.0",
     "lodash.isnumber": "^3.0.3",
@@ -19,18 +22,36 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "babel-jest": "^24.7.1",
+    "bundlesize": "^0.18.0",
+    "coveralls": "^3.0.11",
     "jest": "^24.7.1",
     "microbundle": "^0.11.0"
   },
   "scripts": {
-    "build": "microbundle",
+    "build": "microbundle --sourcemap",
     "release": "npm run build && npm t && git push && npm publish",
     "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "test:ci": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "size": "bundlesize"
   },
   "jest": {
     "watchPathIgnorePatterns": [
       "node_modules"
     ]
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/speco.js",
+      "maxSize": "2 Kb"
+    },
+    {
+      "path": "./dist/speco.es.js",
+      "maxSize": "2 Kb"
+    },
+    {
+      "path": "./dist/speco.umd.js",
+      "maxSize": "2 Kb"
+    }
+  ]
 }

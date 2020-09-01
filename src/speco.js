@@ -353,18 +353,6 @@ function mayBe(spec) {
   return or(spec, NULL);
 }
 
-function explain(spec, value) { 
-  const errors = spec(value).errors();
-  if (errors.length === 0) {
-    return "Ok";
-  }
-  return "error: " + formatErrors(errors);
-}
-
-function isValid(spec, value) { 
-  return spec(value).check();
-}
-
 function ARRAY_OF(spec) {
   return function(value) {
     function describeSpec() {
@@ -410,6 +398,24 @@ function ARRAY_OF(spec) {
   };
 }
 
+function explain(spec, value) { 
+  const errors = spec(value).errors();
+  if (errors.length === 0) {
+    return "Ok";
+  }
+  return "error: " + formatErrors(errors);
+}
+
+function isValid(spec, value) { 
+  return spec(value).check();
+}
+
+function check(spec, value) { 
+  if (!isValid(spec, value)) {
+    throw new Error(explain(spec, value));
+  }
+}
+
 export default {
   STRING,
   NUM,
@@ -424,5 +430,6 @@ export default {
   or,
   mayBe,
   explain,
-  isValid
+  isValid,
+  check
 }

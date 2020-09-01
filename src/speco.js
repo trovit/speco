@@ -365,12 +365,58 @@ function isValid(spec, value) {
   return spec(value).check();
 }
 
+function ARRAY_OF(spec) {
+  return function(value) {
+    function describeSpec() {
+      if(!spec) {
+        return "";
+      }
+      return "[" + spec(value).describe() + "]";
+    }
+
+    function describe() {
+      return "spec.ARRAY_OF("+ describeSpec() + ")";
+    }
+
+    function check() {
+      return errors().length === 0;
+    }
+
+    function errors() {
+      function elementsErrors(elements) {
+        return elements.reduce(
+          (acc, element) => { 
+            if(element) {
+              return acc.concat(spec(element).errors());  
+            } 
+            return acc;
+          },
+          []
+        );
+      }
+
+      if(!Array.isArray(value)) {
+        return [format(value) + " is not an array"];   
+      }
+
+      return elementsErrors(value);
+    }
+
+    return {
+      check,
+      describe,
+      errors
+    };
+  };
+}
+
 export default {
   STRING,
   NUM,
   ANY,
   OBJ,
   ARRAY,
+  ARRAY_OF,
   NULL,
   pred,
   not,

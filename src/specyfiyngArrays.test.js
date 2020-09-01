@@ -24,6 +24,15 @@ describe("explaining arrays according to specs", () => {
     expect(s.explain(arraySpec, [3, 1])).toEqual("error: [3,1] should have 3 elements, 3 fails spec.STRING");
   });
 
+  test("specifying array with all elements of the same type", () => {
+    const arraySpec = s.ARRAY_OF(s.STRING);
+ 
+    expect(s.explain(arraySpec, ["a"])).toEqual("Ok");
+    expect(s.explain(arraySpec, ["a", "b"])).toEqual("Ok");
+    expect(s.explain(arraySpec, ["a", 1, {}])).toEqual("error: 1 fails spec.STRING, {} fails spec.STRING");
+    expect(s.explain(arraySpec, [1, "l"])).toEqual("error: 1 fails spec.STRING");
+  });
+
   test("composing not and array specs", () => {
     const arraySpec = s.ARRAY();
     
@@ -65,5 +74,14 @@ describe("validating arrays according to specs", () => {
     expect(s.isValid(arraySpec, ["a", 1])).toEqual(false);
     expect(s.isValid(arraySpec, [1, 2, []])).toEqual(false);
     expect(s.isValid(arraySpec, [3, 1])).toEqual(false);
+  });
+
+  test("specifying array with all elements of the same type", () => {
+    const arraySpec = s.ARRAY_OF(s.STRING);
+ 
+    expect(s.isValid(arraySpec, ["a"])).toEqual(true);
+    expect(s.isValid(arraySpec, ["a", "b"])).toEqual(true);
+    expect(s.isValid(arraySpec, ["a", 1, {}])).toEqual(false);
+    expect(s.isValid(arraySpec, [1, "l"])).toEqual(false);
   });
 });

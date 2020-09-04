@@ -89,3 +89,41 @@ s.isValid(objSpec, {a: 1, b: 2}));
 s.isValid(objSpec, {a: true}));
 // => false
 ```
+
+### 4. Specifying nested objects
+
+Use `OBJ` again to specify the value of the key in the specification of the outer object:
+
+
+```js
+import s from "./speco";
+
+const innerObjSpec = s.OBJ({req: {a: s.STRING}});
+const objSpec = s.OBJ({req: {x: innerObjSpec}});
+
+s.isValid(objSpec, {x: {a: "2"}});
+// => true
+
+// outer object missing required key `x`
+s.isValid(objSpec, {y: {a: "2"}});
+// => false
+
+// value associated to `x` key should be an object
+s.isValid(objSpec, {x: true});
+// => false
+
+// inner object missing required key `a`
+s.isValid(objSpec, {x: {b: "2"}});
+// => false
+
+// value associated to `a` key of the inner object should be a string
+s.isValid(objSpec, {x: {a: 2}});
+// => false
+
+// outer object missing required key `x`
+s.isValid(objSpec, {y: {a: "2"}});
+// => false
+```
+
+Object nesting can have as many levels as you like.
+    

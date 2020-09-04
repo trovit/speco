@@ -57,6 +57,7 @@ describe("validating arrays according to specs", () => {
     expect(s.isValid(arraySpec, 1)).toEqual(false);
     expect(s.isValid(arraySpec, "a")).toEqual(false);
     expect(s.isValid(arraySpec, {})).toEqual(false);
+    expect(s.isValid(arraySpec, () => {})).toEqual(false);
     expect(s.isValid(arraySpec, new Foo())).toEqual(false);
   });
 

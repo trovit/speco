@@ -2,7 +2,7 @@ import s from "./speco";
 
 describe("explaining objects according to specs", () => {  
   test("only plain objects", () => {
-    const objSpec = s.OBJ({req: {}});
+    const objSpec = s.OBJ();
     function Foo() {
       this.a = 1;
     }
@@ -101,15 +101,17 @@ describe("explaining objects according to specs", () => {
 
 describe("validating objects according to specs", () => {  
   test("only plain objects", () => {
-    const objSpec = s.OBJ({req: {}});
+    const objSpec = s.OBJ();
     function Foo() {
       this.a = 1;
     }
 
+    expect(s.isValid(objSpec, {})).toEqual(true);
     expect(s.isValid(objSpec, {a: 1, b: 2})).toEqual(true);
     expect(s.isValid(objSpec, [])).toEqual(false);
     expect(s.isValid(objSpec, 1)).toEqual(false);
     expect(s.isValid(objSpec, "a")).toEqual(false);
+    expect(s.isValid(objSpec, () => {})).toEqual(false);;
     expect(s.isValid(objSpec, new Foo())).toEqual(false);
   });
 
@@ -127,6 +129,7 @@ describe("validating objects according to specs", () => {
     expect(s.isValid(objSpec, {a: 1, b: "lala"})).toEqual(true);
     expect(s.isValid(objSpec, {a: 1, b: 2})).toEqual(false);
     expect(s.isValid(objSpec, {a: true, b: "koko"})).toEqual(false);
+    expect(s.isValid(objSpec, {a: 1, b: "koko", c: "moko"})).toEqual(true);
   });  
 
   test("specifying values for optional keys", () => {

@@ -119,10 +119,6 @@ s.isValid(objSpec, {x: {b: "2"}});
 // value associated to `a` key of the inner object should be a string
 s.isValid(objSpec, {x: {a: 2}});
 // => false
-
-// outer object missing required key `x`
-s.isValid(objSpec, {y: {a: "2"}});
-// => false
 ```
 
 Object nesting can have as many levels as you like.

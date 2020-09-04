@@ -9,3 +9,5 @@ Humble specs for JS data
 
 
 #### [Specs for arrays](/docs/arraySpecs.md)
+
+#### [Specs for objects](/docs/objectsSpecs.md)

@@ -1,4 +1,4 @@
-## Specs for arrays
+## Specs for objects
 
 ### 1. Specifying that a variable is a plain object
 

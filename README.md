@@ -7,7 +7,7 @@ Humble specs for JS data
 
 #### 1. Specs for values
 
-##### 1.1. Specs to specify string values
+##### 1.1. Specifying string values
 
 Use `s.STRING`:
 
@@ -21,7 +21,7 @@ s.isValid(s.STRING, "hola");
 // => true
 ```
 
-##### 1.2. Specs to specify numeric values
+##### 1.2. Specifying numeric values
 
 Use `s.NUM`:
 

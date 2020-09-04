@@ -1,4 +1,4 @@
-## Specs for values
+## Specs for primitive values
 
 ### 1. Specifying string values
 

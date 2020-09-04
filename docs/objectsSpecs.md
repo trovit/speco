@@ -36,7 +36,7 @@ s.isValid(objSpec, new SomeObject());
 
 ### 2. Specifying that a variable is a plain object with required keys
 
-Use `OBJ` passing it an object which has a `req` key with an object as value that associstes an spec for each required key:
+Use `OBJ` passing it an object which has a `req` key with an object as value that associates an spec for each required key:
 
 ```js
 import s from "./speco";
@@ -63,6 +63,29 @@ s.isValid(objSpec, {a: 1, b: "koko", c: "moko"});
 // => true
 ```
 
-### 3. Specifying that a variable is a plain object with required keys
+### 3. Specifying that a variable is a plain object with optional keys
 
-TODO
+Use `OBJ` passing it an object which has an `opt` key with an object as value that associates an spec for each optional key:
+
+```js
+import s from "./speco";
+
+const objSpec = s.OBJ({opt: {a: s.NUM, b: s.STRING}});
+    
+s.isValid(objSpec, {a: 1, b: "lala"}));
+// => true
+
+// missing an optional key is ok
+s.isValid(objSpec, {a: 1}));
+// => true
+s.isValid(objSpec, {b: "lala"}));
+// => true
+
+// value associated to `b` key should be a string
+s.isValid(objSpec, {a: 1, b: 2}));
+// => false
+
+// value associated to `a` key should be a number
+s.isValid(objSpec, {a: true}));
+// => false
+```

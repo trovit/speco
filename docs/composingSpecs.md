@@ -22,6 +22,8 @@ s.isValid(s.not(notNumberSpec), 3);
 // => true
 ```
 
+`not` returns a spec so it can be composed using any other function for composing specs.
+
 ### 2. Composing specs with `and`
 Use `and` passing it all the specs that a value should satisfy:
 
@@ -86,3 +88,61 @@ s.isValid(usingSeveralAndsSpec, 30);
 ```
 
 ### 3. Composing specs with `or`
+
+Use `or` passing it all the specs that a value may satisfy:
+
+Example specifying a value that may be an even number or 5:
+
+```js
+import s from "./speco";
+
+const isEven = (n) => n%2 === 0;
+const isFive = (n) => n === 5;
+
+const evenOrFiveSpec = s.or(
+  s.and(s.NUM, s.pred(isEven)),
+  s.and(s.NUM, s.pred(isFive))
+);
+
+s.isValid(evenOrFiveSpec, "2");
+// => false
+
+s.isValid(evenOrFiveSpec, 2);
+// => true
+
+s.isValid(evenOrFiveSpec, 3);
+// => false
+
+s.isValid(evenOrFiveSpec, 5);
+// => true
+```
+
+`or` returns a spec so it can be composed using any other function for composing specs.
+
+```js
+import s from "./speco";
+
+const isEven = (n) => n%2 === 0;
+
+const stringOrEvenSpec = s.or(s.STRING, s.pred(isEven));
+
+s.isValid(stringOrEvenSpec, 3);
+// => false
+
+s.isValid(stringOrEvenSpec, 2);
+// => false
+
+s.isValid(stringOrEvenSpec, "2");
+// => true
+
+const noStringAndOdd = s.not(stringOrEven);
+
+s.isValid(noStringAndOdd, 2);
+// => false
+
+s.isValid(noStringAndOdd, "3");
+// => false
+
+s.isValid(noStringAndOdd, 3);
+// => true
+```

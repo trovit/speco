@@ -72,7 +72,7 @@ s.isValid(arraySpec, ["a", 1]):
 // => true
 
 s.isValid(arraySpec, ["a", 1, {}]);
-// => true
+// => false
 
 s.isValid(arraySpec, [3, 1]);
 // => false

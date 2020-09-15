@@ -30,10 +30,16 @@ describe("validating values satisfy specs", ()=> {
 
   test("composing specs with and", () => {
     const isEven = (n) => n%2 === 0;
-    const composedSpec = s.and(s.pred(isEven), s.NUM);
+    const numberAndEvenSpec = s.and(s.pred(isEven), s.NUM);
 
-    expect(s.isValid(composedSpec, "2")).toEqual(false);
-    expect(s.isValid(composedSpec, 2)).toEqual(true);
+    expect(s.isValid(numberAndEvenSpec, "2")).toEqual(false);
+    expect(s.isValid(numberAndEvenSpec, 2)).toEqual(true);
+
+    const notNumberOrNotEvenSpec = s.not(numberAndEvenSpec);
+
+    expect(s.isValid(notNumberOrNotEvenSpec, "2")).toEqual(true);
+    expect(s.isValid(notNumberOrNotEvenSpec, 2)).toEqual(false); 
+    expect(s.isValid(notNumberOrNotEvenSpec, 3)).toEqual(true); 
 
     const manyComposedSpec = s.and(
       s.pred((n) => n%10 === 0),

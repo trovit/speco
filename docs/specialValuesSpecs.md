@@ -17,7 +17,7 @@ s.isValid(s.ANY, {});
 // => true
 ```
 
-### 2. Specifying that a variable is null
+### 2. Specifying that a value is null
 
 Use `NULL`:
 
@@ -34,7 +34,7 @@ s.isValid(s.NULL, {});
 // => false
 ```
 
-### 3. Specifying that a variable that satisfies a given spec might be null
+### 3. Specifying that a value that satisfies a given spec might be also null
 Use `mayBe` passing it the spec that the value should satisfy when it is not null:
 
 ```js

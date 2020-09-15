@@ -14,3 +14,5 @@ Humble specs for JS data
 #### [Specs using predicates](/docs/predicatesSpecs.md)
 
 #### [Specs for special values: ANY, NULL and mayBe](/docs/specialValuesSpecs.md)
+
+#### [Composing specs with not, and and or](/docs/composingSpecs.md)

@@ -130,19 +130,19 @@ s.isValid(stringOrEvenSpec, 3);
 // => false
 
 s.isValid(stringOrEvenSpec, 2);
-// => false
-
-s.isValid(stringOrEvenSpec, "2");
 // => true
 
-const noStringAndOdd = s.not(stringOrEven);
-
-s.isValid(noStringAndOdd, 2);
-// => false
-
-s.isValid(noStringAndOdd, "3");
-// => false
-
-s.isValid(noStringAndOdd, 3);
+s.isValid(stringOrEvenSpec, "5");
 // => true
+
+const noStringAndOddSpec = s.not(stringOrEvenSpec);
+
+s.isValid(noStringAndOddSpec, 3);
+// => true
+
+s.isValid(noStringAndOddSpec, 2);
+// => false
+
+s.isValid(noStringAndOddSpec, "5");
+// => false
 ```

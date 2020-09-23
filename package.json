@@ -1,6 +1,6 @@
 {
   "name": "speco",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Humble specs for JS data",
   "source": "src/speco.js",
   "module": "dist/speco.es.js",

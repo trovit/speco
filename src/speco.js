@@ -398,6 +398,16 @@ function ARRAY_OF(spec) {
   };
 }
 
+function ARRAY_OF_DISTINCT(spec) {
+  return and(ARRAY_OF(spec), pred(function elementsAreDistinct(ls) {
+    if(!Array.isArray(ls)) {
+      return false;
+    }
+    const distinctLs = ls.filter((v,i,a)=> a.indexOf(v) == i);
+    return distinctLs.length === ls.length;
+  }))
+}
+
 function explain(spec, value) { 
   const errors = spec(value).errors();
   if (errors.length === 0) {
@@ -423,6 +433,7 @@ export default {
   OBJ,
   ARRAY,
   ARRAY_OF,
+  ARRAY_OF_DISTINCT,
   NULL,
   pred,
   not,

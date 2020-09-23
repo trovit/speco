@@ -43,6 +43,15 @@ describe("explaining arrays according to specs", () => {
     expect(s.explain(s.not(otherArraySpec), ["a", 1, {}])).toEqual("error: [\"a\",1,{}] fails not [spec.ARRAY([spec.STRING, spec.NUM, OBJ({})])]");
     expect(s.explain(s.not(otherArraySpec), ["a", 1])).toEqual("Ok");
   });
+
+  test("specifying array with all elements of the same type with no duplicates", () => {
+    const arraySpec = s.ARRAY_OF_DISTINCT(s.STRING);
+
+    expect(s.explain(arraySpec, ["a"])).toEqual('Ok');
+    expect(s.explain(arraySpec, ["a", "b"])).toEqual('Ok');
+    expect(s.explain(arraySpec, ["a", "a"])).toEqual('error: and [[\"a\",\"a\"] fails spec.pred(elementsAreDistinct)]');
+    expect(s.explain(arraySpec, { a: 1 })).toEqual('error: and [{\"a\":1} is not an array, {\"a\":1} fails spec.pred(elementsAreDistinct)]');
+  });
 });
 
 describe("validating arrays according to specs", () => {  
@@ -82,6 +91,16 @@ describe("validating arrays according to specs", () => {
  
     expect(s.isValid(arraySpec, ["a"])).toEqual(true);
     expect(s.isValid(arraySpec, ["a", "b"])).toEqual(true);
+    expect(s.isValid(arraySpec, ["a", 1, {}])).toEqual(false);
+    expect(s.isValid(arraySpec, [1, "l"])).toEqual(false);
+  });
+
+  test("specifying array with all elements of the same type with no duplicates", () => {
+    const arraySpec = s.ARRAY_OF_DISTINCT(s.STRING);
+
+    expect(s.isValid(arraySpec, ["a"])).toEqual(true);
+    expect(s.isValid(arraySpec, ["a", "b"])).toEqual(true);
+    expect(s.isValid(arraySpec, ["a", "a"])).toEqual(false);
     expect(s.isValid(arraySpec, ["a", 1, {}])).toEqual(false);
     expect(s.isValid(arraySpec, [1, "l"])).toEqual(false);
   });

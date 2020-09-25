@@ -59,7 +59,29 @@ s.isValid(arraySpec, [1, "l"]);
 // => false
 ```
 
-### 3. Specifying arrays with a given number of elements of given types
+### 3. Specifying arrays with any number of elements of the same type and no duplicates
+
+Use `ARRAY_OF_DISTINCT` passing it the spec that all its elements follow:
+
+```js
+import s from "./speco";
+
+const arraySpec = s.ARRAY_OF_DISTINCT(s.STRING);
+
+s.isValid(arraySpec, ["a"]);
+// => true
+
+s.isValid(arraySpec, ["a", "b"]);
+// => true
+
+s.isValid(arraySpec, ["a", "a"]);
+// => false
+
+s.isValid(arraySpec, ["a", 1, {}]);
+// => false
+```
+
+### 4. Specifying arrays with a given number of elements with given types
 
 Use `ARRAY` passing it the specs for each of the elements of the array:
 
